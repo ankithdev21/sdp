@@ -1,0 +1,62 @@
+<-- execute with: mvn antrun:run -Dmaven.ant.target=<target-name> -->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-antrun-plugin</artifactId>
+    <version>1.7</version>
+    <inherited>false</inherited>
+    <configuration>
+        <target>
+            <!--<property name="compile_classpath" refid="maven.compile.classpath"/>-->
+            <property name="install_script_dir" location="${project.basedir}/src/main/deploy"/>
+
+            <taskdef name="if" classname="ise.antelope.tasks.IfTask"/>
+            <taskdef name="ssh" classname="com.sshtools.ant.Ssh" classpathref="maven.plugin.classpath"/>
+
+            <if name="maven.ant.target">
+                <ant target="${maven.ant.target}"/>
+                <else>
+                    <fail message="Please specify a target to execute in 'maven.ant.target' property" />
+                </else>
+            </if>
+        </target>
+    </configuration>
+    <dependencies>
+        <!-- http://antelope.tigris.org/nonav/docs/manual/bk03.html -->
+        <dependency>
+            <groupId>org.tigris.antelope</groupId>
+            <artifactId>antelopetasks</artifactId>
+            <version>3.2.10</version>
+        </dependency>
+
+        <!-- add scp and sshexec task -->
+        <!-- http://ant.apache.org/manual/Tasks/sshexec.html -->
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant-jsch</artifactId>
+            <version>1.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.48</version>
+        </dependency>
+
+        <!-- add ssh task -->
+        <!-- http://www.basilv.com/psd/blog/2007/automated-deploys-using-ssh-and-ant -->
+        <dependency>
+            <groupId>sshtools</groupId>
+            <artifactId>j2ssh-ant</artifactId>
+            <version>0.2.9</version>
+        </dependency>
+        <dependency>
+            <groupId>sshtools</groupId>
+            <artifactId>j2ssh-core</artifactId>
+            <version>0.2.9</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+    </dependencies>
+</plugin>
